@@ -6,9 +6,10 @@ import streamlit as st
 def scrape_instagram_posts(username, max_posts=5):
     L = instaloader.Instaloader()
 
-    # Use session cookie instead of username/password
+    # Use sessionid from Streamlit secrets
     sessionid = st.secrets["IG_SESSIONID"]
     L.context._session.cookies.set("sessionid", sessionid)
+    L.context.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"  # Optional: spoof desktop browser
 
     try:
         profile = Profile.from_username(L.context, username.strip("@"))
