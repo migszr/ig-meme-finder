@@ -38,6 +38,10 @@ def search_hashtag_posts(hashtags, max_posts=5):
 
                 if len(posts_seen) >= max_posts:
                     return posts_seen
+    
+        except Exception as e:
+            st.error(f"Error loading #{tag}: {e}")
+
         except Exception as e:
             posts_seen.append({
                 "username": "error",
