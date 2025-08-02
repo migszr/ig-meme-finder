@@ -1,20 +1,20 @@
-# IG Meme Finder (Prototype)
+# IG Real Hashtag Scraper
 
-A simple Streamlit app to preview Instagram-style content similar to @mexvines.
+This app searches real Instagram posts using hashtags and displays live data.
 
-## 🔧 Setup
+## Features
+- Scrapes public posts from real hashtags
+- Displays media (image/video)
+- Shows likes/views
+- Provides download and IG post links
 
-1. Create a virtual environment:
+## Setup
+
+1. Add your IG sessionid to `.streamlit/secrets.toml`:
+    IG_SESSIONID = "your_session_id_here"
+
+2. Run:
     python -m venv venv
-    source venv/bin/activate  (or venv\Scripts\activate on Windows)
-
-2. Install dependencies:
+    source venv/bin/activate
     pip install -r requirements.txt
-
-3. Run the app:
     streamlit run app.py
-
-## 🧪 Current Status
-
-- Uses mocked data for demo purposes
-- Scraper and NLP pipeline to be added later

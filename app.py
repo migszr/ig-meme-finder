@@ -1,18 +1,32 @@
 import streamlit as st
-from utils import scrape_instagram_posts
+from utils import search_hashtag_posts
 
-st.set_page_config(page_title="IG Meme Finder", layout="wide")
-st.title("Find Instagram Content Similar to @mexvines")
+st.set_page_config(page_title="IG Real Hashtag Scraper", layout="wide")
+st.title("Find Real IG Content by Hashtag (Style Match)")
 
-seed_username = st.text_input("Start with an account:", "@mexvines")
+default_tags = "#mexicohumor, #chingon, #latinhumor"
+tag_input = st.text_input("Enter hashtags (comma separated):", default_tags)
 
-if st.button("Find Similar Content"):
-    with st.spinner("Scraping content..."):
-        results = scrape_instagram_posts(seed_username)
+if st.button("Search IG Content"):
+    tag_list = [tag.strip().lstrip("#").lower() for tag in tag_input.split(",") if tag.strip()]
+    st.markdown(f"**Searching posts using hashtags:** {', '.join(tag_list)}")
+
+    results = search_hashtag_posts(tag_list)
 
     for item in results:
-        if item["image"]:
-            st.image(item["image"], width=300)
-        st.markdown(f"**@{item['username']}**")
+        st.markdown("---")
+        if item["media_url"]:
+            if item["media_type"] == "image":
+                st.image(item["media_url"], width=300)
+            else:
+                st.video(item["media_url"])
+
+        st.markdown(f"**@{item['username']}** | Hashtag: #{item['matched_tag']}")
         st.markdown(f"Caption: {item['caption']}")
-        st.markdown(f"Similarity Score: `{item['score']}`")
+        if item["views"]:
+            st.markdown(f"▶️ {item['views']:,} views")
+        st.markdown(f"❤️ {item['likes']:,} likes")
+        if item["post_url"]:
+            st.markdown(f"[🔗 View Post]({item['post_url']})")
+        if item["media_url"]:
+            st.markdown(f"[📥 Download Media]({item['media_url']})")
