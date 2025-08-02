@@ -4,21 +4,14 @@ import random
 import streamlit as st
 
 def scrape_instagram_posts(username, max_posts=5):
-    # Create an Instaloader instance
     L = instaloader.Instaloader()
 
-    # Get credentials from Streamlit secrets
-    IG_USERNAME = st.secrets["IG_USERNAME"]
-    IG_PASSWORD = st.secrets["IG_PASSWORD"]
+    # Use session cookie instead of username/password
+    sessionid = st.secrets["IG_SESSIONID"]
+    L.context._session.cookies.set("sessionid", sessionid)
 
     try:
-        # Login to Instagram
-        L.login(IG_USERNAME, IG_PASSWORD)
-
-        # Get the profile
         profile = Profile.from_username(L.context, username.strip("@"))
-
-        # Fetch posts
         posts = profile.get_posts()
 
         results = []
@@ -28,8 +21,8 @@ def scrape_instagram_posts(username, max_posts=5):
             results.append({
                 "username": username,
                 "caption": post.caption or "No caption",
-                "score": round(random.uniform(0.8, 0.95), 2),  # Mock similarity score
-                "image": post.url  # Image or thumbnail URL
+                "score": round(random.uniform(0.8, 0.95), 2),
+                "image": post.url
             })
 
         return results
